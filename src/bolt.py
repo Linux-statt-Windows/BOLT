@@ -16,7 +16,7 @@ BASE_URL=''
 GROUP_ID=0
 TOKEN=''
 
-SAVE_FILE='/var/lib/telegroup-admin-helper/update_id.data'
+SAVE_FILE='/var/lib/bolt/update_id.data'
 CONFIG_FILE='/etc/bolt'
 
 def get_updates(url):
@@ -74,8 +74,8 @@ def main():
         INTERVAL = args.interval
 
     # check if data path exists
-    if not os.path.isdir('/var/lib/telegroup-admin-helper'):
-        os.mkdir('/var/lib/telegroup-admin-helper')
+    if not os.path.isdir('/var/lib/bolt'):
+        os.mkdir('/var/lib/bolt')
 
     print('Starting BOLT...')
     global BASE_URL
