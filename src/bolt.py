@@ -29,7 +29,7 @@ def get_updates(url):
 
 
 def parse_config():
-    notify_id, group_id, token, banned_nicks, interval = '', '', '', [''], ''
+    group_id, token, interval = '', '', ''
     if os.path.isfile(CONFIG_FILE):
         f = open(CONFIG_FILE, 'r')
         line = f.readlines()
