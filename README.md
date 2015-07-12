@@ -7,7 +7,7 @@ Install
 
 - Copy conf/bolt to /etc/bolt
 - Set up your config(`/etc/bolt`) correctly!
-- Run bolt
+- Run bolt with sudo(write to save-file in /var/lib/bolt/)
 
 
 Input Parameters
