@@ -79,7 +79,7 @@ def get_updates(url):
                                 name, in_url = faq.get_faq()
                                 send_message(name \
                                         + '\n\nURL: ' + in_url)
-                            elif cmd.startswith('facebook') and MODULES['Facebook']:
+                            elif cmd.startswith('Facebook') and MODULES['Facebook']:
                                 group_url, short_url, site_url = fb.get_fb()
                                 send_message('Facebook Gruppen' \
                                         + '\n\nGruppe: ' + group_url \
@@ -122,7 +122,7 @@ def rm_command(inp):
 
 
 def send_message(msg):
-    msg = re.sub('&', '%26', msg)
+    msg = re.sub('&', '%26', str(msg))
     msg = 'chat_id=' + GROUP_ID + '&text=' + str(msg)
     rqst = urllib.request.urlopen(BASE_URL + 'sendMessage', msg.encode('utf-8'))
 
