@@ -10,6 +10,8 @@ Install
 - Run bolt with sudo(write to save-file in /var/lib/bolt/)
 
 
+*Hinweis: die Module müssen im selben Ordner, wie BOLT sein*
+
 Input Parameters
 ----------------
 

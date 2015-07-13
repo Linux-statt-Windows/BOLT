@@ -15,34 +15,18 @@ import math
 import random
 from html.parser import HTMLParser
 
+# own modules
+import themadesmonats
+import nine_gag
+import calc
+
+
 BASE_URL=''
 GROUP_ID=''
 TOKEN=''
 
 SAVE_FILE='/var/lib/bolt/update_id.data'
 CONFIG_FILE='/etc/bolt'
-
-class nine_gag_parser(HTMLParser):
-
-    def __init__(self):
-        super().__init__()
-        self.img_url = None
-        self.tag = None
-        self.data = None
-        self.fetched = False
-
-    def handle_starttag(self, tag, attrs):
-        self.tag = tag
-        if tag == 'link':
-            if attrs[0][1] == 'image_src':
-                self.img_url = attrs[1][1]
-
-    def handle_data(self, data):
-        data = re.sub('\n*', '', data)
-        data = re.sub(' - 9GAG', '', data)
-        if self.tag == 'title' and len(data) > 0 and not self.fetched:
-            self.data = data
-            self.fetched = True
 
 
 def get_updates(url):
@@ -55,65 +39,21 @@ def get_updates(url):
                 if 'text' in msg['message']:
                     if check_update_id(msg['update_id']):
                         cmd = msg['message']['text']
-                        if cmd.startswith('/'):
-                            #TODO: Implement features and commands
-                            if cmd.startswith('/hilfe'):
-                                send_message('Diese Kommandos verstehe ich :)\n\n/hilfe - diese Hilfe\n/calc [Term] - Rechnet den Term aus(kein Punkt-vor-Strich/keine Klammern)\n/9gag - sendet ein zufälliges 9gag Meme')
-                            elif cmd.startswith('/calc'):
-                                send_message(calc(rm_command(cmd)))
-                            elif cmd.startswith('/9gag'):
-                                nine_gag()
+                        #TODO: Implement features and commands
+                        if cmd.startswith('/hilfe'):
+                            send_message('Diese Kommandos verstehe ich :)\n\n' \
+                                    +'/hilfe - diese Hilfe\n' \
+                                    +'/calc [Term] - Rechnet den Term aus(kein Punkt-vor-Strich/keine Klammern)\n' \
+                                    + '/9gag - sendet ein zufälliges 9gag Meme')
+                        elif cmd.startswith('/calc'):
+                            send_message(calc.calc(rm_command(cmd)))
+                        elif cmd.startswith('/9gag'):
+                            send_message(nine_gag.get_meme())
+                        elif cmd.startswith('/themadesmonats'):
+                            send_message(themadesmonats.monthly_topic())
+                        else:
+                            send_message('Ungültiger Befehl')
         time.sleep(INTERVAL)
-
-
-def nine_gag():
-    url = 'http://api-9gag.herokuapp.com/'
-    rqst = urllib.request.urlopen('http://9gag.com/random')
-    data = rqst.read().decode('utf-8')
-    parser = nine_gag_parser()
-    parser.feed(data)
-    img_url = parser.img_url
-    title = parser.data
-    if title and img_url:
-        send_message(title + '\n\n' + img_url)
-        parser.fetched = False
-
-
-def calc(inp):
-    inp = re.sub('\s', '', inp)
-    exp = re.split('[\+\-\*\/%\^]', inp)
-    inp = re.sub('^' + exp[0], '', inp)
-    if len(exp) == 1:
-        l = 2
-    else:
-        l = len(exp) - 1
-    for i in range(l):
-        if inp.startswith('+'):
-            inp = re.sub('^'+'\+'+str(exp[i+1]), '', inp)
-            exp[i+1] = (float(exp[i]) + float(exp[i+1]))
-        elif inp.startswith('-'):
-            inp = re.sub('^'+'\-'+str(exp[i+1]), '', inp)
-            exp[i+1] = (float(exp[i]) - float(exp[i+1]))
-        elif inp.startswith('*'):
-            inp = re.sub('^'+'\*'+str(exp[i+1]), '', inp)
-            exp[i+1] = (float(exp[i]) * float(exp[i+1]))
-        elif inp.startswith('/'):
-            if exp[i+1] == '0':
-                return 'Nope :P'
-            else:
-                inp = re.sub('^'+'\/'+str(exp[i+1]), '', inp)
-                exp[i+1] = (float(exp[i]) / float(exp[i+1]))
-        elif inp.startswith('^'):
-            inp = re.sub('^'+'\^'+str(exp[i+1]), '', inp)
-            exp[i+1] = (float(exp[i]) ** float(exp[i+1]))
-        elif inp.startswith('%'):
-            exp[i+1] = (float(exp[i]) % int(exp[i+1]))
-        elif inp.startswith('sqrt'):
-            exp = re.sub('\\)', '', re.sub('sqrt\(', '', inp))
-            return str(math.sqrt(float(exp)))
-        else:
-            return 'Falscher Befehl'
-    return exp[len(exp)-1]
 
 
 def rm_command(inp):
