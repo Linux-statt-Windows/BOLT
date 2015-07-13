@@ -11,20 +11,18 @@ import json
 import argparse
 import time
 import re
-import math
-import random
-from html.parser import HTMLParser
+import sys
 
 # own modules
-import themadesmonats
-import distrodesmonats
-import nine_gag
-import calc
-import faq
-import forum
-import fb
-import mumble
-import github
+import modules.themadesmonats as themadesmonats
+import modules.distrodesmonats as distrodesmonats
+import modules.nine_gag as nine_gag
+import modules.calc as calc
+import modules.faq as faq
+import modules.forum as forum
+import modules.fb as fb
+import modules.mumble as mumble
+import modules.github as github
 
 BASE_URL=''
 GROUP_ID=''
@@ -78,7 +76,6 @@ def get_updates(url):
                                         + '\nFacebook-Seite: ' + site_url)
                             elif cmd.startswith('Mumble'):
                                 direct_url, in_url, port = mumble.get_mumble()
-                                print(direct_url + in_url + port)
                                 send_message('Mumble\n\n' \
                                 #        + 'Direct Link: ' + direct_url \ doesnt work because & in url
                                         + '\nURL: ' + in_url \
