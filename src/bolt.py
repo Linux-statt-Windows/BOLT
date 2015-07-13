@@ -27,6 +27,7 @@ import modules.github as github
 BASE_URL=''
 GROUP_ID=''
 TOKEN=''
+MODULES=['']
 
 SAVE_FILE='/var/lib/bolt/update_id.data'
 CONFIG_FILE='/etc/bolt'
@@ -48,44 +49,44 @@ def get_updates(url):
                                     + '/hilfe - diese Hilfe\n' \
                                     + '/calc [Term] - Rechnet den Term aus(kein Punkt-vor-Strich/keine Klammern)\n' \
                                     + '/9gag - sendet ein zufälliges 9gag Meme')
-                        elif cmd.startswith('/calc'):
+                        elif cmd.startswith('/calc') and MODULES['calc']:
                             send_message(calc.calc(rm_command(cmd)))
-                        elif cmd.startswith('/9gag'):
+                        elif cmd.startswith('/9gag') and MODULES['9gag']:
                             send_message(nine_gag.get_meme())
                         elif cmd.startswith('/lsw'):
                             cmd = re.sub('/lsw ', '', cmd)
-                            if cmd.startswith('Thema'):
+                            if cmd.startswith('Thema') and MODULES['Thema']:
                                 name, month, in_url = themadesmonats.monthly_topic()
                                 send_message(name\
                                         + '\n\nMonat: ' + month \
                                         + '\nURL: ' + in_url)
-                            elif cmd.startswith('Distro'):
+                            elif cmd.startswith('Distro') and MODULES['Distro']:
                                 name, month, in_url = distrodesmonats.get_distro()
                                 send_message(name\
                                         + '\n\nMonat: ' + month \
                                         + '\nURL: ' + in_url)
-                            elif cmd.startswith('FAQ'):
+                            elif cmd.startswith('FAQ') and MODULES['FAQ']:
                                 name, in_url = faq.get_faq()
                                 send_message(name \
                                         + '\n\nURL: ' + in_url)
-                            elif cmd.startswith('facebook'):
+                            elif cmd.startswith('facebook') and MODULES['Facebook']:
                                 group_url, short_url, site_url = fb.get_fb()
                                 send_message('Facebook Gruppen' \
                                         + '\n\nGruppe: ' + group_url \
                                         + '\nGruppe(short URL): ' + short_url \
                                         + '\nFacebook-Seite: ' + site_url)
-                            elif cmd.startswith('Mumble'):
+                            elif cmd.startswith('Mumble') and MODULES['Mumble']:
                                 direct_url, in_url, port = mumble.get_mumble()
                                 send_message('Mumble\n\n' \
                                 #        + 'Direct Link: ' + direct_url \ doesnt work because & in url
                                         + '\nURL: ' + in_url \
                                         + '\nPort: ' + str(port))
-                            elif cmd.startswith('Github'):
+                            elif cmd.startswith('Github') and MODULES['Github']:
                                 in_url, short_url = github.get_github()
                                 send_message('Github' \
                                         + '\n\nURL: ' + in_url \
                                         + '\nShort URL: ' + short_url)
-                            elif cmd.startswith('Version'):
+                            elif cmd.startswith('Version') and MODULES['Version']:
                                 send_message('LsW-Plugins' \
                                         + '\n\n/lsw: Bekomme den Link zu unserer Homepage.'
                                         + '\n/lsw Thema: Finde heraus, was das aktuelle Thema des Monats ist.' \
@@ -94,7 +95,7 @@ def get_updates(url):
                                         + '\n/lsw FAQ: Siehe unsere Antworten auf beliebte Fragen.' \
                                         + '\n/lsw Facebook: Bekomme die Links zu unserer Facebook Gruppe und Seite.' \
                                         + '\n/lsw Version: Bekomme Infos über das Plugin selbst.')
-                            elif cmd.startswith(''):
+                            elif cmd.startswith('') and MODULES['Forum']:
                                 name, short_url, long_url, de_url, eu_url, faq_url, rules_url = forum.get_forum()
                                 send_message(name\
                                         + '\n\nShort URL: ' + short_url \
@@ -103,7 +104,7 @@ def get_updates(url):
                                         + '\nEU URL:' + eu_url \
                                         + '\nFAQ: ' + faq_url \
                                         + '\nRegeln: ' + rules_url)
-                        else:
+                        elif cmd.startswith('/'):
                             send_message('Ungültiger Befehl! Diese Kommandos verstehe ich :)\n\n' \
                                     + '/hilfe - diese Hilfe\n' \
                                     + '/calc [Term] - Rechnet den Term aus(kein Punkt-vor-Strich/keine Klammern)\n' \
@@ -158,7 +159,7 @@ def get_latest_update_id():
 
 
 def parse_config():
-    group_id, token, interval = '', '', ''
+    group_id, token, interval, modules = '', '', '', ''
     if os.path.isfile(CONFIG_FILE):
         f = open(CONFIG_FILE, 'r')
         line = f.readlines()
@@ -170,7 +171,14 @@ def parse_config():
                     token = re.sub('\n', '', re.sub('TOKEN=','', line[i]))
                 elif line[i].startswith('INTERVAL'):
                     interval = re.sub('\n', '', re.sub('INTERVAL=','', line[i]))
-        return group_id, token, interval
+                elif line[i].startswith('{'):
+                    for j in range(len(line)-i):
+                        if line[i+j] == '}':
+                            break
+                        else:
+                            modules += line[i+j]
+                    break
+        return group_id, token, interval, modules
 
 
 def main():
@@ -178,8 +186,11 @@ def main():
     global GROUP_ID
     global TOKEN
     global INTERVAL
-    group_id, token, interval = parse_config()
-    if group_id is not '' and token is not '' and interval is not '':
+    global MODULES
+    group_id, token, interval, modules = parse_config()
+    if group_id is not '' and token is not '' and interval is not '' and modules is not '':
+        modules = json.loads(modules)
+        MODULES = modules
         GROUP_ID = group_id
         TOKEN = token
         INTERVAL = float(interval)

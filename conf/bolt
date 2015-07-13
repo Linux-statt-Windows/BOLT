@@ -6,3 +6,18 @@ TOKEN=
 
 # time before looking for new users (in seconds)
 INTERVAL=5
+
+# modules
+{
+    "Thema":"True",
+    "Distro":"True",
+    "Github":"False",
+    "Mumble":"False",
+    "9gag":"True",
+    "Forum":"True",
+    "Facebook":"True",
+    "calc":"False",
+    "FAQ":"True",
+    "Version":"True",
+    "Version":"True"
+}
