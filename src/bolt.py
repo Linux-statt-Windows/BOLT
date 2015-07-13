@@ -54,47 +54,58 @@ def get_updates(url):
                             send_message(calc.calc(rm_command(cmd)))
                         elif cmd.startswith('/9gag'):
                             send_message(nine_gag.get_meme())
-                        elif cmd.startswith('/themadesmonats'):
-                            name, month, in_url = themadesmonats.monthly_topic()
-                            send_message(name\
-                                    + '\n\nMonat: ' + month \
-                                    + '\nURL: ' + in_url)
-                        elif cmd.startswith('/distrodesmonats'):
-                            name, month, in_url = distrodesmonats.get_distro()
-                            send_message(name\
-                                    + '\n\nMonat: ' + month \
-                                    + '\nURL: ' + in_url)
-                        elif cmd.startswith('/faq'):
-                            name, in_url = faq.get_faq()
-                            send_message(name \
-                                    + '\n\nURL: ' + in_url)
-                        elif cmd.startswith('/forum'):
-                            name, short_url, long_url, de_url, eu_url, faq_url, rules_url = forum.get_forum()
-                            send_message(name\
-                                    + '\n\nShort URL: ' + short_url \
-                                    + '\nLong URL: ' + long_url \
-                                    + '\nDE URL: ' + de_url \
-                                    + '\nEU URL:' + eu_url \
-                                    + '\nFAQ: ' + faq_url \
-                                    + '\nRegeln: ' + rules_url)
-                        elif cmd.startswith('/fb'):
-                            group_url, short_url, site_url = fb.get_fb()
-                            send_message('Facebook Gruppen' \
-                                    + '\n\nGruppe: ' + group_url \
-                                    + '\nGruppe(short URL): ' + short_url \
-                                    + '\nFacebook-Seite: ' + site_url)
-                        elif cmd.startswith('/mumble'):
-                            direct_url, in_url, port = mumble.get_mumble()
-                            print(direct_url + in_url + port)
-                            send_message('Mumble\n\n' \
-                            #        + 'Direct Link: ' + direct_url \ doesnt work because & in url
-                                    + '\nURL: ' + in_url \
-                                    + '\nPort: ' + str(port))
-                        elif cmd.startswith('/github'):
-                            in_url, short_url = github.get_github()
-                            send_message('Github' \
-                                    + '\n\nURL: ' + in_url \
-                                    + '\nShort URL: ' + short_url)
+                        elif cmd.startswith('/lsw'):
+                            cmd = re.sub('/lsw ', '', cmd)
+                            if cmd.startswith('Thema'):
+                                name, month, in_url = themadesmonats.monthly_topic()
+                                send_message(name\
+                                        + '\n\nMonat: ' + month \
+                                        + '\nURL: ' + in_url)
+                            elif cmd.startswith('Distro'):
+                                name, month, in_url = distrodesmonats.get_distro()
+                                send_message(name\
+                                        + '\n\nMonat: ' + month \
+                                        + '\nURL: ' + in_url)
+                            elif cmd.startswith('FAQ'):
+                                name, in_url = faq.get_faq()
+                                send_message(name \
+                                        + '\n\nURL: ' + in_url)
+                            elif cmd.startswith('facebook'):
+                                group_url, short_url, site_url = fb.get_fb()
+                                send_message('Facebook Gruppen' \
+                                        + '\n\nGruppe: ' + group_url \
+                                        + '\nGruppe(short URL): ' + short_url \
+                                        + '\nFacebook-Seite: ' + site_url)
+                            elif cmd.startswith('Mumble'):
+                                direct_url, in_url, port = mumble.get_mumble()
+                                print(direct_url + in_url + port)
+                                send_message('Mumble\n\n' \
+                                #        + 'Direct Link: ' + direct_url \ doesnt work because & in url
+                                        + '\nURL: ' + in_url \
+                                        + '\nPort: ' + str(port))
+                            elif cmd.startswith('Github'):
+                                in_url, short_url = github.get_github()
+                                send_message('Github' \
+                                        + '\n\nURL: ' + in_url \
+                                        + '\nShort URL: ' + short_url)
+                            elif cmd.startswith('Version'):
+                                send_message('LsW-Plugins' \
+                                        + '\n\n/lsw: Bekomme den Link zu unserer Homepage.'
+                                        + '\n/lsw Thema: Finde heraus, was das aktuelle Thema des Monats ist.' \
+                                        + '\n/lsw Distro: Finde heraus, welches die aktuelle Distro des Monats ist.' \
+                                        + '\n/lsw Mumble: Bekomme Infos über unsereren Mumble Server.' \
+                                        + '\n/lsw FAQ: Siehe unsere Antworten auf beliebte Fragen.' \
+                                        + '\n/lsw Facebook: Bekomme die Links zu unserer Facebook Gruppe und Seite.' \
+                                        + '\n/lsw Version: Bekomme Infos über das Plugin selbst.')
+                            elif cmd.startswith(''):
+                                name, short_url, long_url, de_url, eu_url, faq_url, rules_url = forum.get_forum()
+                                send_message(name\
+                                        + '\n\nShort URL: ' + short_url \
+                                        + '\nLong URL: ' + long_url \
+                                        + '\nDE URL: ' + de_url \
+                                        + '\nEU URL:' + eu_url \
+                                        + '\nFAQ: ' + faq_url \
+                                        + '\nRegeln: ' + rules_url)
                         else:
                             send_message('Ungültiger Befehl! Diese Kommandos verstehe ich :)\n\n' \
                                     + '/hilfe - diese Hilfe\n' \
