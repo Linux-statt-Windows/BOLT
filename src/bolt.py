@@ -58,7 +58,7 @@ def get_updates(url):
                         if cmd.startswith('/'):
                             #TODO: Implement features and commands
                             if cmd.startswith('/hilfe'):
-                                send_message('Diese Kommandos verstehe ich :)\n\n/hilfe - diese Hilfe')
+                                send_message('Diese Kommandos verstehe ich :)\n\n/hilfe - diese Hilfe\n/calc [Term] - Rechnet den Term aus(kein Punkt-vor-Strich/keine Klammern)\n/9gag - sendet ein zufälliges 9gag Meme')
                             elif cmd.startswith('/calc'):
                                 send_message(calc(rm_command(cmd)))
                             elif cmd.startswith('/9gag'):
