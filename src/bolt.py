@@ -17,9 +17,14 @@ from html.parser import HTMLParser
 
 # own modules
 import themadesmonats
+import distrodesmonats
 import nine_gag
 import calc
-
+import faq
+import forum
+import fb
+import mumble
+import github
 
 BASE_URL=''
 GROUP_ID=''
@@ -31,7 +36,7 @@ CONFIG_FILE='/etc/bolt'
 
 def get_updates(url):
     while True:
-        data = 'limit=100&offset=' + get_latest_update_id() 
+        data = 'limit=3&offset=' + get_latest_update_id() 
         rqst = urllib.request.urlopen(url, data.encode('utf-8'))
         data = json.loads(rqst.read().decode('utf-8'))
         for msg in data['result']:
@@ -42,17 +47,59 @@ def get_updates(url):
                         #TODO: Implement features and commands
                         if cmd.startswith('/hilfe'):
                             send_message('Diese Kommandos verstehe ich :)\n\n' \
-                                    +'/hilfe - diese Hilfe\n' \
-                                    +'/calc [Term] - Rechnet den Term aus(kein Punkt-vor-Strich/keine Klammern)\n' \
+                                    + '/hilfe - diese Hilfe\n' \
+                                    + '/calc [Term] - Rechnet den Term aus(kein Punkt-vor-Strich/keine Klammern)\n' \
                                     + '/9gag - sendet ein zufälliges 9gag Meme')
                         elif cmd.startswith('/calc'):
                             send_message(calc.calc(rm_command(cmd)))
                         elif cmd.startswith('/9gag'):
                             send_message(nine_gag.get_meme())
                         elif cmd.startswith('/themadesmonats'):
-                            send_message(themadesmonats.monthly_topic())
+                            name, month, in_url = themadesmonats.monthly_topic()
+                            send_message(name\
+                                    + '\n\nMonat: ' + month \
+                                    + '\nURL: ' + in_url)
+                        elif cmd.startswith('/distrodesmonats'):
+                            name, month, in_url = distrodesmonats.get_distro()
+                            send_message(name\
+                                    + '\n\nMonat: ' + month \
+                                    + '\nURL: ' + in_url)
+                        elif cmd.startswith('/faq'):
+                            name, in_url = faq.get_faq()
+                            send_message(name \
+                                    + '\n\nURL: ' + in_url)
+                        elif cmd.startswith('/forum'):
+                            name, short_url, long_url, de_url, eu_url, faq_url, rules_url = forum.get_forum()
+                            send_message(name\
+                                    + '\n\nShort URL: ' + short_url \
+                                    + '\nLong URL: ' + long_url \
+                                    + '\nDE URL: ' + de_url \
+                                    + '\nEU URL:' + eu_url \
+                                    + '\nFAQ: ' + faq_url \
+                                    + '\nRegeln: ' + rules_url)
+                        elif cmd.startswith('/fb'):
+                            group_url, short_url, site_url = fb.get_fb()
+                            send_message('Facebook Gruppen' \
+                                    + '\n\nGruppe: ' + group_url \
+                                    + '\nGruppe(short URL): ' + short_url \
+                                    + '\nFacebook-Seite: ' + site_url)
+                        elif cmd.startswith('/mumble'):
+                            direct_url, in_url, port = mumble.get_mumble()
+                            print(direct_url + in_url + port)
+                            send_message('Mumble\n\n' \
+                            #        + 'Direct Link: ' + direct_url \ doesnt work because & in url
+                                    + '\nURL: ' + in_url \
+                                    + '\nPort: ' + str(port))
+                        elif cmd.startswith('/github'):
+                            in_url, short_url = github.get_github()
+                            send_message('Github' \
+                                    + '\n\nURL: ' + in_url \
+                                    + '\nShort URL: ' + short_url)
                         else:
-                            send_message('Ungültiger Befehl')
+                            send_message('Ungültiger Befehl! Diese Kommandos verstehe ich :)\n\n' \
+                                    + '/hilfe - diese Hilfe\n' \
+                                    + '/calc [Term] - Rechnet den Term aus(kein Punkt-vor-Strich/keine Klammern)\n' \
+                                    + '/9gag - sendet ein zufälliges 9gag Meme')
         time.sleep(INTERVAL)
 
 
@@ -62,7 +109,7 @@ def rm_command(inp):
 
 
 def send_message(msg):
-    msg = 'chat_id=' + GROUP_ID + '&text=' + str(msg)
+    msg = 'chat_id=' + GROUP_ID + '&text=' + str(msg) 
     rqst = urllib.request.urlopen(BASE_URL + 'sendMessage', msg.encode('utf-8'))
 
     #NOTE: Maybe send check?

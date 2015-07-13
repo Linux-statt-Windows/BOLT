@@ -27,6 +27,20 @@ optional arguments:
 ```
 
 
+Modules
+-------
+
+- Forum
+- Facebook
+- Thema des Monats
+- Distri des Monats
+- Github
+- Mumble
+- FAQ
+- 9gag
+- Calc
+
+
 License
 -------
 Licensed under GNU General Public License.
