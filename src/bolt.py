@@ -53,6 +53,15 @@ def get_updates(url):
                             send_message(calc.calc(rm_command(cmd)))
                         elif cmd.startswith('/9gag') and MODULES['9gag']:
                             send_message(nine_gag.get_meme())
+                        elif cmd == '/lsw' and MODULES['Forum']:
+                            name, short_url, long_url, de_url, eu_url, faq_url, rules_url = forum.get_forum()
+                            send_message(name\
+                                    + '\n\nShort URL: ' + short_url \
+                                    + '\nLong URL: ' + long_url \
+                                    + '\nDE URL: ' + de_url \
+                                    + '\nEU URL:' + eu_url \
+                                    + '\nFAQ: ' + faq_url \
+                                    + '\nRegeln: ' + rules_url)
                         elif cmd.startswith('/lsw'):
                             cmd = re.sub('/lsw ', '', cmd)
                             if cmd.startswith('Thema') and MODULES['Thema']:
@@ -95,15 +104,8 @@ def get_updates(url):
                                         + '\n/lsw FAQ: Siehe unsere Antworten auf beliebte Fragen.' \
                                         + '\n/lsw Facebook: Bekomme die Links zu unserer Facebook Gruppe und Seite.' \
                                         + '\n/lsw Version: Bekomme Infos über das Plugin selbst.')
-                            elif cmd.startswith('') and MODULES['Forum']:
-                                name, short_url, long_url, de_url, eu_url, faq_url, rules_url = forum.get_forum()
-                                send_message(name\
-                                        + '\n\nShort URL: ' + short_url \
-                                        + '\nLong URL: ' + long_url \
-                                        + '\nDE URL: ' + de_url \
-                                        + '\nEU URL:' + eu_url \
-                                        + '\nFAQ: ' + faq_url \
-                                        + '\nRegeln: ' + rules_url)
+                            elif not cmd.startswith(''):
+                                a = 1
                         elif cmd.startswith('/'):
                             send_message('Ungültiger Befehl! Diese Kommandos verstehe ich :)\n\n' \
                                     + '/hilfe - diese Hilfe\n' \
