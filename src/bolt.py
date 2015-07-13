@@ -48,7 +48,8 @@ def get_updates(url):
                             send_message('Diese Kommandos verstehe ich :)\n\n' \
                                     + '/hilfe - diese Hilfe\n' \
                                     + '/calc [Term] - Rechnet den Term aus(kein Punkt-vor-Strich/keine Klammern)\n' \
-                                    + '/9gag - sendet ein zufälliges 9gag Meme')
+                                    + '/9gag - sendet ein zufälliges 9gag Meme\n' \
+                                    + '/lsw - Plugin der Linux statt Windows Community')
                         elif cmd.startswith('/calc') and MODULES['calc']:
                             send_message(calc.calc(rm_command(cmd)))
                         elif cmd.startswith('/9gag') and MODULES['9gag']:
@@ -87,7 +88,7 @@ def get_updates(url):
                             elif cmd.startswith('Mumble') and MODULES['Mumble']:
                                 direct_url, in_url, port = mumble.get_mumble()
                                 send_message('Mumble\n\n' \
-                                #        + 'Direct Link: ' + direct_url \ doesnt work because & in url
+                                        + 'Direct Link: ' + direct_url \
                                         + '\nURL: ' + in_url \
                                         + '\nPort: ' + str(port))
                             elif cmd.startswith('Github') and MODULES['Github']:
@@ -110,7 +111,8 @@ def get_updates(url):
                             send_message('Ungültiger Befehl! Diese Kommandos verstehe ich :)\n\n' \
                                     + '/hilfe - diese Hilfe\n' \
                                     + '/calc [Term] - Rechnet den Term aus(kein Punkt-vor-Strich/keine Klammern)\n' \
-                                    + '/9gag - sendet ein zufälliges 9gag Meme')
+                                    + '/9gag - sendet ein zufälliges 9gag Meme\n' \
+                                    + '/lsw - Plugin der Linux statt Windows Community')
         time.sleep(INTERVAL)
 
 
@@ -120,7 +122,8 @@ def rm_command(inp):
 
 
 def send_message(msg):
-    msg = 'chat_id=' + GROUP_ID + '&text=' + str(msg) 
+    msg = re.sub('&', '%26', msg)
+    msg = 'chat_id=' + GROUP_ID + '&text=' + str(msg)
     rqst = urllib.request.urlopen(BASE_URL + 'sendMessage', msg.encode('utf-8'))
 
     #NOTE: Maybe send check?
