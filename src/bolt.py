@@ -35,7 +35,7 @@ CONFIG_FILE='/etc/bolt'
 
 def get_updates(url):
     while True:
-        data = 'limit=3&offset=' + get_latest_update_id() 
+        data = 'limit=3&offset=' + str(get_latest_update_id())
         rqst = urllib.request.urlopen(url, data.encode('utf-8'))
         data = json.loads(rqst.read().decode('utf-8'))
         for msg in data['result']:
