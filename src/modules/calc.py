@@ -7,8 +7,10 @@ def callback():
     return '/calc', calc
 
 
-def calc(inp):
-    inp = inp[0]
+def calc(myinp):
+    inp = ''
+    for i in myinp:
+        inp += i
     inp = re.sub('\s', '', inp)
     exp = re.split('[\+\-\*\/%\^]', inp)
     inp = re.sub('^' + exp[0], '', inp)

@@ -13,18 +13,6 @@ import time
 import re
 import sys
 
-# own modules
-#TODO: full modularity
-import modules.themadesmonats as themadesmonats
-import modules.distrodesmonats as distrodesmonats
-import modules.nine_gag as nine_gag
-import modules.calc as calc
-import modules.faq as faq
-import modules.forum as forum
-import modules.fb as fb
-import modules.mumble as mumble
-import modules.github as github
-
 from modules.wrapper import *
 
 BASE_URL=''
