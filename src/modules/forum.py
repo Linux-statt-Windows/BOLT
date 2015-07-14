@@ -5,7 +5,10 @@ import json
 
 URL = 'http://api.linux-statt-windows.org/infos.json'
 
-def get_forum():
+def callback():
+    return '/lsw', get_forum
+
+def get_forum(inp):
     rqst = urllib.request.urlopen(URL)
     data = json.loads(rqst.read().decode('utf-8'))
     forum = data[0]['forum']

@@ -5,7 +5,11 @@ import json
 
 URL = 'http://api.linux-statt-windows.org/infos.json'
 
-def get_github():
+def callback():
+    return '/lsw Github', get_github
+
+
+def get_github(inp):
     rqst = urllib.request.urlopen(URL)
     data = json.loads(rqst.read().decode('utf-8'))
     github = data[0]['github']

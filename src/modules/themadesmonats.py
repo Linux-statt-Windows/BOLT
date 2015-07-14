@@ -7,7 +7,11 @@ import re
 
 URL = 'http://api.linux-statt-windows.org/infos.json'
 
-def monthly_topic():
+def callback():
+    return '/lsw Thema', monthly_topic
+
+
+def monthly_topic(inp):
     now = datetime.datetime.now()
     names = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']
     rqst = urllib.request.urlopen(URL)

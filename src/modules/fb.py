@@ -5,7 +5,11 @@ import json
 
 URL = 'http://api.linux-statt-windows.org/infos.json'
 
-def get_fb():
+def callback():
+    return '/lsw Facebook', get_fb
+
+
+def get_fb(inp):
     rqst = urllib.request.urlopen(URL)
     data = json.loads(rqst.read().decode('utf-8'))
     fb = data[0]['fb']

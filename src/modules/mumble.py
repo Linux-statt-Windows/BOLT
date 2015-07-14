@@ -5,7 +5,11 @@ import json
 
 URL = 'http://api.linux-statt-windows.org/infos.json'
 
-def get_mumble():
+def callback():
+    return '/lsw Mumble', get_mumble
+
+
+def get_mumble(inp):
     rqst = urllib.request.urlopen(URL)
     data = json.loads(rqst.read().decode('utf-8'))
     mumble = data[0]['mumble']

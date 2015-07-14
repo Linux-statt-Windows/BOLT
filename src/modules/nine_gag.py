@@ -27,7 +27,11 @@ class nine_gag_parser(HTMLParser):
             self.fetched = True
 
 
-def get_meme():
+def callback():
+    return '/9gag', get_meme
+
+
+def get_meme(inp):
     rqst = urllib.request.urlopen('http://9gag.com/random')
     data = rqst.read().decode('utf-8')
     parser = nine_gag_parser()
@@ -36,7 +40,6 @@ def get_meme():
     title = parser.data
     if title and img_url:
         return (title + '\n\n' + img_url)
-        #parser.fetched = False
 
 
 if __name__ == '__main__':

@@ -5,7 +5,11 @@ import json
 
 URL = 'http://api.linux-statt-windows.org/infos.json'
 
-def get_distro():
+def callback():
+    return '/lsw Distro', get_distro
+
+
+def get_distro(inp):
     rqst = urllib.request.urlopen(URL)
     data = json.loads(rqst.read().decode('utf-8'))
     distro = data[0]['distro_month']

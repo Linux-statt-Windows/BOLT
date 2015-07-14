@@ -25,7 +25,7 @@ import modules.fb as fb
 import modules.mumble as mumble
 import modules.github as github
 
-from wrapper import *
+from modules.wrapper import *
 
 BASE_URL=''
 GROUP_ID=''

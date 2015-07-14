@@ -5,7 +5,11 @@ import json
 
 URL = 'http://api.linux-statt-windows.org/infos.json'
 
-def get_faq():
+def callback():
+    return '/lsw FAQ', get_faq
+
+
+def get_faq(inp):
     rqst = urllib.request.urlopen(URL)
     data = json.loads(rqst.read().decode('utf-8'))
     faq = data[0]['faq']

@@ -3,6 +3,10 @@
 import re
 import math
 
+def callback():
+    return '/calc', calc
+
+
 def calc(inp):
     inp = re.sub('\s', '', inp)
     exp = re.split('[\+\-\*\/%\^]', inp)
