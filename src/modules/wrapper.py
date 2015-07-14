@@ -25,7 +25,14 @@ class module_wrapper(object):
             return self.get_help()
         elif cmd in self.plugins:
             return self.plugins[cmd](self.rm_command(cmd))
-    
+        else:
+            cmd = re.split(' ',cmd)
+            if cmd[0] in self.plugins:
+                new_cmd = []
+                for c in range(1,len(cmd)):
+                    new_cmd.append(cmd[c])
+                return self.plugins[cmd[0]](new_cmd)
+
 
     def get_help(self):
         help = 'Diese Befehle verstehe ich ;)\n'

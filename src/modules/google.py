@@ -9,12 +9,17 @@ def callback():
 
 
 def get_google(key):
+    search = ''
+    for k in key:
+        search += str(k) + ' '
     data = {
             "v":"1.0",
-            "q":key
+            "q":search
             }
     data = urllib.parse.urlencode(data)
-    rqst = urllib.request.urlopen('http://ajax.googleapis.com/ajax/services/search/web?' + data)
+    data = 'http://ajax.googleapis.com/ajax/services/search/web?' + data
+    rqst = urllib.request.urlopen(data)
+    print(data)
     data = json.loads(rqst.read().decode('utf-8'))
     results = data['responseData']['results']
     pr = 'Ergebnisse: \n'
