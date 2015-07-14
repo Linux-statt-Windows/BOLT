@@ -38,11 +38,6 @@ class module_wrapper(object):
         cmd = re.sub('@.*', '', cmd)
         if cmd.startswith('/hilfe'):
             return self.get_help()
-            #return 'Diese Kommandos verstehe ich :)\n\n' \
-            #        + '/hilfe - diese Hilfe\n' \
-            #        + '/calc [Term] - Rechnet den Term aus(kein Punkt-vor-Strich/keine Klammern)\n' \
-            #        + '/9gag - sendet ein zufälliges 9gag Meme\n' \
-            #        + '/lsw - Plugin der Linux statt Windows Community'
         elif cmd.startswith('/calc') and self.modules['calc'] == 'True':
             return self.calc(self.rm_command(cmd))
         elif cmd.startswith('/9gag') and self.modules['9gag'] == 'True':
