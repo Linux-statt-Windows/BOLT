@@ -17,9 +17,8 @@ def get_google(key):
             "q":search
             }
     data = urllib.parse.urlencode(data)
-    data = 'http://ajax.googleapis.com/ajax/services/search/web?' + data
+    data = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=test'# + data
     rqst = urllib.request.urlopen(data)
-    print(data)
     data = json.loads(rqst.read().decode('utf-8'))
     results = data['responseData']['results']
     pr = 'Ergebnisse: \n'

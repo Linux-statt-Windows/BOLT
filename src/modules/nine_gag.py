@@ -12,12 +12,17 @@ class nine_gag_parser(HTMLParser):
         self.tag = None
         self.data = None
         self.fetched = False
+        self.is_gif = True
 
     def handle_starttag(self, tag, attrs):
         self.tag = tag
         if tag == 'link':
             if attrs[0][1] == 'image_src':
                 self.img_url = attrs[1][1]
+        if tag == 'div':
+            if len(attrs) >= 2:
+                if attrs[1][0] == 'data-image':
+                    self.is_gif = True
 
     def handle_data(self, data):
         data = re.sub('\n*', '', data)
@@ -32,14 +37,16 @@ def callback():
 
 
 def get_meme(inp):
-    rqst = urllib.request.urlopen('http://9gag.com/random')
-    data = rqst.read().decode('utf-8')
     parser = nine_gag_parser()
-    parser.feed(data)
-    img_url = parser.img_url
-    title = parser.data
-    if title and img_url:
-        return (title + '\n\n' + img_url)
+    while parser.is_gif:
+        parser.is_gif = False
+        rqst = urllib.request.urlopen('http://9gag.com/random')
+        data = rqst.read().decode('utf-8')
+        parser.feed(data)
+        img_url = parser.img_url
+        title = parser.data
+        if title and img_url and not parser.is_gif:
+            return (title + '\n\n' + img_url)
 
 
 def get_help():
@@ -47,4 +54,4 @@ def get_help():
 
 
 if __name__ == '__main__':
-    get_meme()
+    print(get_meme(0))
