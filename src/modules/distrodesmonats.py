@@ -9,8 +9,9 @@ def get_distro():
     rqst = urllib.request.urlopen(URL)
     data = json.loads(rqst.read().decode('utf-8'))
     distro = data[0]['distro_month']
-    return distro['name'], distro['month'], distro['url']
-
+    return distro['name'] \
+            + '\n\nMonat: ' + distro['month'] \
+            + '\nURL: ' + distro['url']  
 
 if __name__ == '__main__':
     get_distro()

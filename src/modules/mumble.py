@@ -9,8 +9,10 @@ def get_mumble():
     rqst = urllib.request.urlopen(URL)
     data = json.loads(rqst.read().decode('utf-8'))
     mumble = data[0]['mumble']
-    return mumble['direct_url'], mumble['url'], mumble['port']
-
+    return 'Mumble\n\n' \
+        + 'Direct Link: ' + mumble['direct_url'] \
+        + '\nURL: ' + mumble['url'] \
+        + '\nPort: ' + str(mumble['port'])
 
 if __name__ == '__main__':
     print(get_mumble())

@@ -9,7 +9,9 @@ def get_github():
     rqst = urllib.request.urlopen(URL)
     data = json.loads(rqst.read().decode('utf-8'))
     github = data[0]['github']
-    return github['url'], github['short_url']
+    return'Github' \
+            + '\n\nURL: ' + github['url'] \
+            + '\nShort URL: ' + github['short_url']
 
 
 if __name__ == '__main__':

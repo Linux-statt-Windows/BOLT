@@ -13,7 +13,9 @@ def monthly_topic():
     rqst = urllib.request.urlopen(URL)
     data = json.loads(rqst.read().decode('utf-8'))
     topic = data[0]['topic_month']
-    return topic['name'], topic['month'], topic['url']
+    return topic['name'] \
+            + '\n\nMonat: ' + topic['month'] \
+            + '\nURL: ' + topic['url']
 
 
 if __name__ == '__main__':

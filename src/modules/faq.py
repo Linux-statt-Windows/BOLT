@@ -9,7 +9,8 @@ def get_faq():
     rqst = urllib.request.urlopen(URL)
     data = json.loads(rqst.read().decode('utf-8'))
     faq = data[0]['faq']
-    return faq['name'], faq['url']
+    return faq['name'] \
+            + '\n\nURL: ' + faq['url']
 
 
 if __name__ == '__main__':

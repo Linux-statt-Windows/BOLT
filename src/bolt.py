@@ -14,6 +14,7 @@ import re
 import sys
 
 # own modules
+#TODO: full modularity
 import modules.themadesmonats as themadesmonats
 import modules.distrodesmonats as distrodesmonats
 import modules.nine_gag as nine_gag
@@ -24,6 +25,8 @@ import modules.fb as fb
 import modules.mumble as mumble
 import modules.github as github
 
+from wrapper import *
+
 BASE_URL=''
 GROUP_ID=''
 TOKEN=''
@@ -33,7 +36,7 @@ SAVE_FILE='/var/lib/bolt/update_id.data'
 CONFIG_FILE='/etc/bolt'
 
 
-def get_updates(url):
+def get_updates(url, modules):
     while True:
         data = 'limit=3&offset=' + str(get_latest_update_id())
         rqst = urllib.request.urlopen(url, data.encode('utf-8'))
@@ -43,76 +46,7 @@ def get_updates(url):
                 if 'text' in msg['message']:
                     if check_update_id(msg['update_id']):
                         cmd = msg['message']['text']
-                        #TODO: Implement features and commands
-                        if cmd.startswith('/hilfe'):
-                            send_message('Diese Kommandos verstehe ich :)\n\n' \
-                                    + '/hilfe - diese Hilfe\n' \
-                                    + '/calc [Term] - Rechnet den Term aus(kein Punkt-vor-Strich/keine Klammern)\n' \
-                                    + '/9gag - sendet ein zufälliges 9gag Meme\n' \
-                                    + '/lsw - Plugin der Linux statt Windows Community')
-                        elif cmd.startswith('/calc') and MODULES['calc']:
-                            send_message(calc.calc(rm_command(cmd)))
-                        elif cmd.startswith('/9gag') and MODULES['9gag']:
-                            send_message(nine_gag.get_meme())
-                        elif cmd == '/lsw' and MODULES['Forum']:
-                            name, short_url, long_url, de_url, eu_url, faq_url, rules_url = forum.get_forum()
-                            send_message(name\
-                                    + '\n\nShort URL: ' + short_url \
-                                    + '\nLong URL: ' + long_url \
-                                    + '\nDE URL: ' + de_url \
-                                    + '\nEU URL:' + eu_url \
-                                    + '\nFAQ: ' + faq_url \
-                                    + '\nRegeln: ' + rules_url)
-                        elif cmd.startswith('/lsw'):
-                            cmd = re.sub('/lsw ', '', cmd)
-                            if cmd.startswith('Thema') and MODULES['Thema']:
-                                name, month, in_url = themadesmonats.monthly_topic()
-                                send_message(name\
-                                        + '\n\nMonat: ' + month \
-                                        + '\nURL: ' + in_url)
-                            elif cmd.startswith('Distro') and MODULES['Distro']:
-                                name, month, in_url = distrodesmonats.get_distro()
-                                send_message(name\
-                                        + '\n\nMonat: ' + month \
-                                        + '\nURL: ' + in_url)
-                            elif cmd.startswith('FAQ') and MODULES['FAQ']:
-                                name, in_url = faq.get_faq()
-                                send_message(name \
-                                        + '\n\nURL: ' + in_url)
-                            elif cmd.startswith('Facebook') and MODULES['Facebook']:
-                                group_url, short_url, site_url = fb.get_fb()
-                                send_message('Facebook Gruppen' \
-                                        + '\n\nGruppe: ' + group_url \
-                                        + '\nGruppe(short URL): ' + short_url \
-                                        + '\nFacebook-Seite: ' + site_url)
-                            elif cmd.startswith('Mumble') and MODULES['Mumble']:
-                                direct_url, in_url, port = mumble.get_mumble()
-                                send_message('Mumble\n\n' \
-                                        + 'Direct Link: ' + direct_url \
-                                        + '\nURL: ' + in_url \
-                                        + '\nPort: ' + str(port))
-                            elif cmd.startswith('Github') and MODULES['Github']:
-                                in_url, short_url = github.get_github()
-                                send_message('Github' \
-                                        + '\n\nURL: ' + in_url \
-                                        + '\nShort URL: ' + short_url)
-                            elif cmd.startswith('Version') and MODULES['Version']:
-                                send_message('LsW-Plugins' \
-                                        + '\n\n/lsw: Bekomme den Link zu unserer Homepage.'
-                                        + '\n/lsw Thema: Finde heraus, was das aktuelle Thema des Monats ist.' \
-                                        + '\n/lsw Distro: Finde heraus, welches die aktuelle Distro des Monats ist.' \
-                                        + '\n/lsw Mumble: Bekomme Infos über unsereren Mumble Server.' \
-                                        + '\n/lsw FAQ: Siehe unsere Antworten auf beliebte Fragen.' \
-                                        + '\n/lsw Facebook: Bekomme die Links zu unserer Facebook Gruppe und Seite.' \
-                                        + '\n/lsw Version: Bekomme Infos über das Plugin selbst.')
-                            elif not cmd.startswith(''):
-                                a = 1
-                        elif cmd.startswith('/'):
-                            send_message('Ungültiger Befehl! Diese Kommandos verstehe ich :)\n\n' \
-                                    + '/hilfe - diese Hilfe\n' \
-                                    + '/calc [Term] - Rechnet den Term aus(kein Punkt-vor-Strich/keine Klammern)\n' \
-                                    + '/9gag - sendet ein zufälliges 9gag Meme\n' \
-                                    + '/lsw - Plugin der Linux statt Windows Community')
+                        send_message(modules.get_response(cmd))
         time.sleep(INTERVAL)
 
 
@@ -122,12 +56,13 @@ def rm_command(inp):
 
 
 def send_message(msg):
-    msg = re.sub('&', '%26', str(msg))
-    msg = 'chat_id=' + GROUP_ID + '&text=' + str(msg)
-    rqst = urllib.request.urlopen(BASE_URL + 'sendMessage', msg.encode('utf-8'))
+    if msg:
+        msg = re.sub('&', '%26', str(msg))
+        msg = 'chat_id=' + GROUP_ID + '&text=' + str(msg)
+        rqst = urllib.request.urlopen(BASE_URL + 'sendMessage', msg.encode('utf-8'))
 
-    #NOTE: Maybe send check?
-    #data = json.loads(rqst.read().decode('utf-8'))
+        #NOTE: Maybe send check?
+        #data = json.loads(rqst.read().decode('utf-8'))
 
 
 def send_image(url):
@@ -226,7 +161,9 @@ def main():
     global BASE_URL
     BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/' # base url for bots (DON'T CHANGE!)
     
-    get_updates(BASE_URL + 'getUpdates')
+    modules = module_wrapper(MODULES)
+
+    get_updates(BASE_URL + 'getUpdates', modules)
 
 
 if __name__ == '__main__':
