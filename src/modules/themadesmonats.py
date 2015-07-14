@@ -22,5 +22,9 @@ def monthly_topic(inp):
             + '\nURL: ' + topic['url']
 
 
+def get_help():
+    return '\n/lsw Thema: Finde heraus, was das aktuelle thema des Monats ist.'
+
+
 if __name__ == '__main__':
     monthly_topic()

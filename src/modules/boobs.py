@@ -13,5 +13,9 @@ def get_boobs(inp):
     return 'http://media.oboobs.ru/' + data[0]['preview']
 
 
+def get_help():
+    return ''
+
+
 if __name__ == '__main__':
     print(get_boobs())

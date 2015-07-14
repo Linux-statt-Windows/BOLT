@@ -42,5 +42,9 @@ def get_meme(inp):
         return (title + '\n\n' + img_url)
 
 
+def get_help():
+    return '\n/9gag - sendet ein zufälliges 9gag Meme'
+
+
 if __name__ == '__main__':
     get_meme()

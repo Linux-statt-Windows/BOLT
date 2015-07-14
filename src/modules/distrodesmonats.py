@@ -17,5 +17,10 @@ def get_distro(inp):
             + '\n\nMonat: ' + distro['month'] \
             + '\nURL: ' + distro['url']  
 
+
+def get_help():
+    return '\n/lsw Distro: Finde heraus, welches die aktuelle Distro des Monats ist.'
+
+
 if __name__ == '__main__':
     get_distro()

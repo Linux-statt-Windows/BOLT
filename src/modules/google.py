@@ -25,5 +25,9 @@ def get_google(key):
     return pr
 
 
+def get_help():
+    return '\n/google [suchbegriff]: Zeigt die  ersten Suchergebnisse der Google-Suche'
+
+
 if __name__ == '__main__':
     print(get_google('test'))

@@ -18,5 +18,9 @@ def get_github(inp):
             + '\nShort URL: ' + github['short_url']
 
 
+def get_help():
+    return ''
+
+
 if __name__ == '__main__':
     print(get_github())

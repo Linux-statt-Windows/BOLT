@@ -47,6 +47,10 @@ def calc(inp):
     return exp[len(exp)-1]
 
 
+def get_help():
+    return '\n/calc [Term] - Rechnet den Term aus(kein Punkt-vor-Strich/keine Klammern)'
+
+
 if __name__ == '__main__':
     inp = input('Input-String: ')
     calc(inp)

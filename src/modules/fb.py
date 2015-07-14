@@ -18,5 +18,10 @@ def get_fb(inp):
             + '\nGruppe(short URL): ' + fb['short_group_url'] \
             + '\nFacebook-Seite: ' + fb['site_url']
 
+
+def get_help():
+    return '\n/lsw Facebook: Bekomme die Links zu unserer Facebook Gruppe und Seite.'
+
+
 if __name__ == '__main__':
     print(get_fb())

@@ -22,5 +22,9 @@ def get_ddgo(key):
     return a
 
 
+def get_help():
+    return ''
+
+
 if __name__ == '__main__':
     print(get_ddgo('link local'))

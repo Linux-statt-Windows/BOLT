@@ -20,6 +20,9 @@ def get_version(inp):
                 + '\n/lsw Version: Bekomme Infos über das Plugin selbst.'
                    
 
+def get_help():
+    return '\n/lsw Version: Bekomme Infos über das Plugin selbst.'
+
 
 if __name__ == '__main__':
     print(get_())

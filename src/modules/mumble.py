@@ -18,5 +18,10 @@ def get_mumble(inp):
         + '\nURL: ' + mumble['url'] \
         + '\nPort: ' + str(mumble['port'])
 
+
+def get_help():
+    return '\n/lsw Mumble: Bekomme Infos über unsereren Mumble Server.'
+
+
 if __name__ == '__main__':
     print(get_mumble())

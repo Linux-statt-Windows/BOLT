@@ -17,5 +17,9 @@ def get_faq(inp):
             + '\n\nURL: ' + faq['url']
 
 
+def get_help():
+    return '\n/lsw FAQ: Siehe unsere Antworten auf beliebte Fragen.'
+
+
 if __name__ == '__main__':
     print(get_faq())
