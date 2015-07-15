@@ -12,6 +12,7 @@ import argparse
 import time
 import re
 import sys
+import requests
 
 from modules.wrapper import *
 
@@ -34,7 +35,11 @@ def get_updates(url, modules):
                 if 'text' in msg['message']:
                     if check_update_id(msg['update_id']):
                         cmd = msg['message']['text']
-                        send_message(modules.get_response(cmd))
+                        response = modules.get_response(cmd)
+                        if os.path.exists(response):
+                            send_image(response)
+                        else:
+                            send_message(response)
         time.sleep(INTERVAL)
 
 
@@ -54,9 +59,16 @@ def send_message(msg):
 
 
 def send_image(url):
-    print(url)
-    msg = 'chat_id=' + GROUP_ID + '&photo=' + url
-    rqst = urllib.request.urlopen(BASE_URL + 'sendPhoto', msg.encode('utf-8'))
+    data = {
+            'client_id':GROUP_ID
+            }
+    files = {
+            'photo':open(url, 'rb')
+            }
+    #data = urllib.parse.urlencode(data).encode('utf-8')
+    response = requests.post(BASE_URL + 'sendMessage?chat_id=', files=files, data=data)
+    print(response)
+    #rqst = urllib.request.urlopen(BASE_URL + 'sendPhoto', files=data)
 
 
 def check_update_id(new_id):

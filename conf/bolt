@@ -5,19 +5,22 @@ GROUP_ID=
 TOKEN=
 
 # time before looking for new users (in seconds)
-INTERVAL=5
+INTERVAL=1
 
 # modules
 {
-    "Thema":"True",
-    "Distro":"True",
-    "Github":"False",
-    "Mumble":"False",
-    "9gag":"True",
-    "Forum":"True",
-    "Facebook":"True",
+    "themadesmonats":"True",
+    "distrodesmonats":"True",
+    "github":"False",
+    "mumble":"False",
+    "nine_gag":"True",
+    "forum":"True",
+    "fb":"True",
     "calc":"False",
-    "FAQ":"True",
-    "Version":"True",
-    "Version":"True"
+    "faq":"True",
+    "version":"True",
+    "google":"False",
+    "weather":"True",
+    "hackernews":"True",
+    "qr":"True"
 }

@@ -20,11 +20,20 @@ def get_weather(inp):
     req = urllib.parse.urlencode(req)
     rqst = urllib.request.urlopen(URL + req)
     data = json.loads(rqst.read().decode('utf-8'))
+    if data['weather'][0]['main'] == 'Clear':
+        icon = ' ☀'
+    elif data['weather'][0]['main'] == 'Clouds':
+        icon = ' ☁☁'
+    elif data['weather'][0]['main'] == 'Rain':
+        icon = ' ☔'
+    elif data['weather'][0]['main'] == 'Thunderstorm':
+        icon = ' ☔☔☔☔'
+
     return 'Wetter in: ' + data['name'] \
             + '\n\nTemperatur: ' + str(data['main']['temp']) + '°C' \
             + '\nMin. Temperatur: ' + str(data['main']['temp_min']) + '°C' \
             + '\nMax. Temperatur: ' + str(data['main']['temp_max']) + '°C' \
-            + '\nWetter: ' + data['weather'][0]['main'] \
+            + '\nWetter: ' + icon \
             + '\nWindgeschwindigkeit: ' + str(data['wind']['speed']) \
             + '\nWindrichtung: ' + str(data['wind']['deg']) + '°'
 
