@@ -2,6 +2,16 @@
 (B)OLT (O)perator for (L)sW (T)elegram Groups. Ein Bot für die LsW-Telegram Gruppen.
 
 
+Features
+--------
+
+- Easy to use Python bot for the official Telegram API
+- Fully modulised
+- Easy to configure
+- Send photos or text messages
+- Restricted to one group
+
+
 Install
 -------
 
@@ -11,6 +21,7 @@ Install
 
 *Requierments: `python-requests(python 3)`*
 *Disclaimer: the modules have to stay in their folder with their relative paths to BOLT*
+
 
 Input Parameters
 ----------------
@@ -31,14 +42,20 @@ Modules
 -------
 
 - Forum
-- Facebook
-- Thema des Monats
-- Distri des Monats
-- Github
-- Mumble
-- FAQ
+    - Facebook
+    - Thema des Monats
+    - Distri des Monats
+    - Github
+    - Mumble
+    - FAQ
 - 9gag
-- Calc
+- Calc (not really working)
+- Meme Generator
+- Hackernews
+- Google (works, but is very very slow)
+- DuckDuckGo (not working atm)
+- QR-Code Generator
+- Wetter
 
 
 License

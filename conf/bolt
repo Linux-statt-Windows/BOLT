@@ -22,5 +22,6 @@ INTERVAL=1
     "google":"False",
     "weather":"True",
     "hackernews":"True",
-    "qr":"True"
+    "qr":"True",
+    "meme":"True"
 }

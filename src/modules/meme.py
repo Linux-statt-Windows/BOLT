@@ -43,7 +43,7 @@ def get_meme(inp):
 
 
 def get_help():
-    return '\n/meme [meme] ["Top Text"] ["Bottom Text"]: Erstellt eine Meme(Alle Memes http://apimeme.com/)'
+    return '\n/meme [meme] ["Top Text"] ["Bottom Text"]: Erstellt ein Meme(Alle Memes http://apimeme.com/)'
 
 
 if __name__ == '__main__':

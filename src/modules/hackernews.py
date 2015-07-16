@@ -24,7 +24,7 @@ def get_hackernews(inp):
 
 
 def get_help():
-    return '\n/hackernews: Get the latest hacker news'
+    return '\n/hackernews: Bekomme die neuesten hacker news'
 
 
 if __name__ == '__main__':
