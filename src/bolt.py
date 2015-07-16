@@ -72,6 +72,7 @@ def send_image(filename):
     elif scheme == 'https':
         host = http.client.HTTPSConnection(host)
     host.request('POST', BASE_URL + 'sendPhoto', body=body, headers={'content-type':content_type, 'content-length':str(len(body))})
+    host.getresponse()
 
 
 def check_update_id(new_id):
