@@ -49,7 +49,7 @@ Modules
     - Mumble
     - FAQ
 - 9gag
-- Calc (not really working)
+- Calc
 - Meme Generator
 - Hackernews
 - Google (works, but is very very slow)
