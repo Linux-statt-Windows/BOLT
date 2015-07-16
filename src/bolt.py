@@ -12,9 +12,10 @@ import argparse
 import time
 import re
 import sys
-import requests
+import http.client
 
 from modules.wrapper import *
+import multipart
 
 BASE_URL=''
 GROUP_ID=''
@@ -58,17 +59,19 @@ def send_message(msg):
         #data = json.loads(rqst.read().decode('utf-8'))
 
 
-def send_image(url):
-    data = {
-            'client_id':GROUP_ID
-            }
-    files = {
-            'photo':open(url, 'rb')
-            }
-    #data = urllib.parse.urlencode(data).encode('utf-8')
-    response = requests.post(BASE_URL + 'sendMessage?chat_id=', files=files, data=data)
-    print(response)
-    #rqst = urllib.request.urlopen(BASE_URL + 'sendPhoto', files=data)
+def send_image(filename):
+    files = [('photo', 'image.jpg', filename)]
+    params =  [('chat_id',GROUP_ID)]
+    parts = urllib.parse.urlparse(BASE_URL + 'sendPhoto')
+    scheme = parts[0]
+    host = parts[1]
+    selector = parts[2]                 
+    content_type, body = multipart.encode_multipart(files, params)
+    if scheme == 'http':
+        host = http.client.HTTPConnection(host)
+    elif scheme == 'https':
+        host = http.client.HTTPSConnection(host)
+    host.request('POST', BASE_URL + 'sendPhoto', body=body, headers={'content-type':content_type, 'content-length':str(len(body))})
 
 
 def check_update_id(new_id):

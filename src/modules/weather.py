@@ -34,8 +34,7 @@ def get_weather(inp):
             + '\nMin. Temperatur: ' + str(data['main']['temp_min']) + '°C' \
             + '\nMax. Temperatur: ' + str(data['main']['temp_max']) + '°C' \
             + '\nWetter: ' + icon \
-            + '\nWindgeschwindigkeit: ' + str(data['wind']['speed']) \
-            + '\nWindrichtung: ' + str(data['wind']['deg']) + '°'
+            + '\nWindgeschwindigkeit: ' + str(data['wind']['speed'])
 
 
 def get_help():
