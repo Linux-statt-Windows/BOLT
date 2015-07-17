@@ -53,7 +53,7 @@ Modules
 - Meme Generator
 - Hackernews
 - Google (works, but is very very slow)
-- DuckDuckGo (not working atm)
+- DuckDuckGo (not working at the moment!)
 - QR-Code Generator
 - Wetter
 
