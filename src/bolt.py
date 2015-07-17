@@ -36,14 +36,15 @@ def get_updates(url, modules):
                 if 'text' in msg['message']:
                     if check_update_id(msg['update_id']):
                         cmd = msg['message']['text']
-                        response = str(modules.get_response(cmd))
-                        if response.startswith('/'):
-                            if os.path.exists(response):
-                                send_image(response)
+                        if cmd.startswith('/'):
+                            response = str(modules.get_response(cmd))
+                            if response.startswith('/'):
+                                if os.path.exists(response):
+                                    send_image(response)
+                                else:
+                                    send_message('Fehler beim Senden der Antwort')
                             else:
-                                send_message('Fehler beim Senden der Antwort')
-                        else:
-                            send_message(response)
+                                send_message(response)
         time.sleep(INTERVAL)
 
 
