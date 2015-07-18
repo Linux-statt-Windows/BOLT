@@ -10,6 +10,7 @@ Features
 - Easy to configure
 - Send photos or text messages
 - Restricted to one group
+- Run in background
 
 
 Install
@@ -35,6 +36,7 @@ optional arguments:
   --token TOKEN        token of your bot
   --interval INTERVAL  interval between two updates
   --group-id GROUP_ID  ID of your telegram-group
+  -b, --background     starts bot in background
 ```
 
 

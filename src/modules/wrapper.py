@@ -1,6 +1,7 @@
 #!/bin/env python3
 
 import re
+import urllib.request
 
 class module_wrapper(object):
 
@@ -34,8 +35,15 @@ class module_wrapper(object):
                         for c in range(1,len(cmd)):
                             new_cmd.append(cmd[c])
                         return self.plugins[cmd[0]](new_cmd)
+                    else:
+                        rqst = urllib.request.urlopen('http://apimeme.com/meme?meme=Grandma+Finds+The+Internet&top=Wat+willst&bottom=du+von+mir%3F')
+                        data = rqst.read()
+                        img = open('/var/lib/bolt/error.png', 'wb')
+                        img.write(data)
+                        img.close()
+                        return '/var/lib/bolt/error.png'
         except:
-            return 'Fehler'
+            return 'Fehler im gewünschten Plugin'
 
 
     def get_help(self):

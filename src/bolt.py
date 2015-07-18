@@ -151,9 +151,14 @@ def main():
     parser.add_argument('--token', type=str, help='token of your bot')
     parser.add_argument('--interval', type=int, help='interval between two updates')
     parser.add_argument('--group-id', type=str, help='ID of your telegram-group')
+    parser.add_argument('-b', '--background', action='store_true', help='starts bot in background')
 
     args = parser.parse_args()
 
+    if args.background:
+        fpid = os.fork()
+        if fpid != 0:
+            sys.exit(0)
     if args.token:
         TOKEN = args.token
     if args.group_id:
