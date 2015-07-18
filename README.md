@@ -58,6 +58,9 @@ Modules
 - DuckDuckGo (not working at the moment!)
 - QR-Code Generator
 - Wetter
+- XKCD
+- OMDB
+- Bitcoin
 
 
 License
