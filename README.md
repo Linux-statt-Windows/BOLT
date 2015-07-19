@@ -23,6 +23,7 @@ Install
 - Run bolt with sudo(write to save-file in /var/lib/bolt/) or as a systemd service
 
 *Requierments: `python-requests(python 3)`*
+
 *Disclaimer: the modules have to stay in their folder with their relative paths to BOLT*
 
 
