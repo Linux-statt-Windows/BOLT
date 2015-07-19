@@ -26,8 +26,17 @@ SAVE_FILE='/var/lib/bolt/update_id.data'
 CONFIG_FILE='/etc/bolt'
 
 
-def get_updates(url, modules):
+def get_updates(url, modules, repeat_events):
+    r = []
+    for event in repeat_events:
+        event = (convert_sec(event[0]), event[1])
+        r.append(list(event + (0,)))
     while True:
+        for event in r:
+            t = time.time()
+            if event[2] + event[0] < t:
+                send_message(event[1](0))
+                event[2] = int(t)
         data = 'limit=3&offset=' + str(get_latest_update_id())
         rqst = urllib.request.urlopen(url, data.encode('utf-8'))
         data = json.loads(rqst.read().decode('utf-8'))
@@ -46,6 +55,21 @@ def get_updates(url, modules):
                             else:
                                 send_message(response)
         time.sleep(INTERVAL)
+
+
+def convert_sec(inp):
+    if inp == 'weekly':
+        return 604800
+    elif inp == 'biweekly':
+        return 604800*2
+    elif inp == 'daily':
+        return 86400
+    elif inp == 'monthly':
+        return 2592000
+    elif inp == 'hourly':
+        return 3600
+    else:
+        return inp
 
 
 def rm_command(inp):
@@ -175,8 +199,9 @@ def main():
     BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/' # base url for bots (DON'T CHANGE!)
     
     modules = module_wrapper(MODULES)
+    repeat_events = modules.get_repeat_events()
 
-    get_updates(BASE_URL + 'getUpdates', modules)
+    get_updates(BASE_URL + 'getUpdates', modules, repeat_events)
 
 
 if __name__ == '__main__':

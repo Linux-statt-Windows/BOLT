@@ -11,13 +11,22 @@ class module_wrapper(object):
         for mod in inmodules:
             if inmodules[mod] == 'True':
                 self.loaded_modules.append(__import__(mod,globals(),locals(),['callback',],1))
+        self.repeat_modules = []
         for mod in self.loaded_modules:
+            if 'get_repeat' in dir(mod):
+                interval = getattr(mod, 'get_repeat')()
+                tpl = (interval, getattr(mod, 'callback')()[1])
+                self.repeat_modules.append(tpl)
             self.methods.append(getattr(mod,'callback'))
             self.helps.append(getattr(mod, 'get_help'))
         self.plugs = []
         for method in self.methods:
             self.plugs.append(method())
         self.plugins = dict(self.plugs)
+
+
+    def get_repeat_events(self):
+        return self.repeat_modules
 
 
     def get_response(self, cmd):

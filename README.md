@@ -11,6 +11,7 @@ Features
 - Send photos or text messages
 - Restricted to one group
 - Run in background
+- Call modules in intervals
 
 
 Install
@@ -55,15 +56,16 @@ Modules
 - Meme Generator
 - Hackernews
 - Google (works, but is very very slow)
-- DuckDuckGo (not working at the moment!)
 - QR-Code Generator
 - Wetter
 - XKCD
 - OMDB
 - Bitcoin
+- Reminder(work in progress)
 
 
 License
 -------
+
 Licensed under GNU General Public License.
 See [LICENSE](./LICENSE) for details.
