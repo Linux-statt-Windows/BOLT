@@ -62,6 +62,7 @@ Modules
 - OMDB
 - Bitcoin
 - Reminder(work in progress)
+- daujones
 
 
 License

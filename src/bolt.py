@@ -34,8 +34,15 @@ def get_updates(url, modules, repeat_events):
     while True:
         for event in r:
             t = time.time()
-            if event[2] + event[0] < t:
-                send_message(event[1](0))
+            if event[2] + event[0] <= t:
+                response = event[1](0)
+                if response.startswith('/'):
+                    if os.path.exists(response):
+                        send_image(response)
+                    else:
+                        send_message('Fehler beim Senden der Antwort')
+                else:
+                    send_message(response)
                 event[2] = int(t)
         data = 'limit=3&offset=' + str(get_latest_update_id())
         rqst = urllib.request.urlopen(url, data.encode('utf-8'))

@@ -3,15 +3,16 @@
 import urllib.request
 import json
 
-URL = ''
+URL = 'http://api.linux-statt-windows.org/infos.json'
 
 def callback():
     return '', get_reminder
 
 
 def get_reminder(inp):
+    rqst = urllib.request.urlopen(URL)
+    data = json.loads(rqst.read().decode('utf-8'))
     # TODO:
-    #  - parse json api
     #  - logic for event handling
     return 'data'
 
