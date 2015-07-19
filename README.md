@@ -12,14 +12,15 @@ Features
 - Restricted to one group
 - Run in background
 - Call modules in intervals
+- Run as systemd service
 
 
 Install
 -------
 
-- Copy conf/bolt to /etc/bolt
-- Set up your config(`/etc/bolt`) correctly!
-- Run bolt with sudo(write to save-file in /var/lib/bolt/)
+- Clone this git to your home folder
+- Run the `install.sh`
+- Run bolt with sudo(write to save-file in /var/lib/bolt/) or as a systemd service
 
 *Requierments: `python-requests(python 3)`*
 *Disclaimer: the modules have to stay in their folder with their relative paths to BOLT*

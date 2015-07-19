@@ -1,0 +1,10 @@
+[Unit]
+Description=BasicOperatorforLswTelegramGroups
+
+[Service]
+ExecStart=/opt/BOLT/src/bolt.py
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
