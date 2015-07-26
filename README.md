@@ -1,5 +1,5 @@
 # BOLT
-(B)OLT (O)perator for (L)sW (T)elegram Groups. A bot for "Linux statt Windows" telegram groups.
+(B)OLT (O)perator for (L)inux statt Windows (T)elegram groups. A bot for "Linux statt Windows" telegram groups.
 
 
 Features
