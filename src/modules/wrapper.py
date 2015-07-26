@@ -35,7 +35,7 @@ class module_wrapper(object):
         try:
             if cmd.startswith('/'):
                 if cmd.startswith('/hilfe'):
-                    return self.get_help()
+                    return self.get_help(cmd[7:])
                 elif cmd in self.plugins:
                     return self.plugins[cmd](self.rm_command(cmd))
                 else:
@@ -56,9 +56,11 @@ class module_wrapper(object):
             return 'Fehler im gewünschten Plugin'
 
 
-    def get_help(self):
+    def get_help(self, cmd):
         help = 'Diese Befehle verstehe ich ;)\n'
         for h in self.helps:
+            if h.lstrip('\n').startswith('/' + cmd):
+                return h
             help += h
         return help
 
