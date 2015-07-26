@@ -14,10 +14,8 @@ def get_forum(inp):
     data = json.loads(rqst.read().decode('utf-8'))
     forum = data[0]['forum']
     return forum['name']\
-            + '\n\nShort URL: ' + forum['short_url'] \
-            + '\nLong URL: ' + forum['long_url'] \
-            + '\nDE URL: ' + forum['de_url'] \
-            + '\nEU URL:' + forum['eu_url'] \
+            + '\n\nLink: ' + forum['long_url'] \
+            + '\nKurzlink: ' + forum['short_url'] \
             + '\nFAQ: ' + forum['faq_url'] \
             + '\nRegeln: ' + forum['rules_url']
 
