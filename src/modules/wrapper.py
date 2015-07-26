@@ -35,6 +35,7 @@ class module_wrapper(object):
         try:
             if cmd.startswith('/'):
                 if cmd.startswith('/hilfe'):
+                    print(cmd)
                     if len(cmd) > 7:
                         return self.get_help(cmd[7:])
                     else:
@@ -61,7 +62,6 @@ class module_wrapper(object):
 
     def get_help(self, cmd):
         help = 'Diese Befehle verstehe ich ;)\n'
-        print(cmd)
         for h in self.helps:
             if cmd is not None:
                 if h.lstrip('\n/').startswith(cmd):

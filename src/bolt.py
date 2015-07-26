@@ -44,7 +44,7 @@ def get_updates(url, modules, repeat_events):
                 else:
                     send_message(response)
                 event[2] = int(t)
-        data = 'limit=30'
+        data = 'limit=30&offset=' + get_latest_update_id()
         rqst = urllib.request.urlopen(url, data.encode('utf-8'))
         data = json.loads(rqst.read().decode('utf-8'))
 #        print(data)
