@@ -35,7 +35,10 @@ class module_wrapper(object):
         try:
             if cmd.startswith('/'):
                 if cmd.startswith('/hilfe'):
-                    return self.get_help(cmd[7:])
+                    if len(cmd) > 7:
+                        return self.get_help(cmd[7:])
+                    else:
+                        return self.get_help(None)
                 elif cmd in self.plugins:
                     return self.plugins[cmd](self.rm_command(cmd))
                 else:
@@ -58,10 +61,13 @@ class module_wrapper(object):
 
     def get_help(self, cmd):
         help = 'Diese Befehle verstehe ich ;)\n'
+        print(cmd)
         for h in self.helps:
-            if h.lstrip('\n').startswith('/' + cmd):
-                return h
-            help += h
+            if cmd is not None:
+                if h.lstrip('\n/').startswith(cmd):
+                    return h
+            else:
+                help += h
         return help
 
     def rm_command(self, inp):
