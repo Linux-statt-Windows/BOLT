@@ -18,8 +18,9 @@ class module_wrapper(object):
                 tpl = (interval, getattr(mod, 'callback')()[1])
                 self.repeat_modules.append(tpl)
             self.methods.append(getattr(mod,'callback'))
-            self.helps.append(getattr(mod, 'get_help'))
+            self.helps.append(getattr(mod, 'get_help')())
         self.plugs = []
+        self.helps = sorted(self.helps)
         for method in self.methods:
             self.plugs.append(method())
         self.plugins = dict(self.plugs)
@@ -58,7 +59,7 @@ class module_wrapper(object):
     def get_help(self):
         help = 'Diese Befehle verstehe ich ;)\n'
         for h in self.helps:
-            help += h()
+            help += h
         return help
 
     def rm_command(self, inp):

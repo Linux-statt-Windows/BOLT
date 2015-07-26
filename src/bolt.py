@@ -44,10 +44,10 @@ def get_updates(url, modules, repeat_events):
                 else:
                     send_message(response)
                 event[2] = int(t)
-        data = 'limit=300&offset=' + get_latest_update_id()
+        data = 'limit=30'
         rqst = urllib.request.urlopen(url, data.encode('utf-8'))
         data = json.loads(rqst.read().decode('utf-8'))
-        print(data)
+#        print(data)
         for msg in data['result']:
             if str(msg['message']['chat']['id']) == GROUP_ID:
                 if 'text' in msg['message']:
