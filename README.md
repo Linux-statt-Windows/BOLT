@@ -1,5 +1,5 @@
 # BOLT
-(B)OLT (O)perator for (L)sW (T)elegram Groups. Ein Bot für die LsW-Telegram Gruppen.
+(B)OLT (O)perator for (L)sW (T)elegram Groups. A bot for "Linux statt Windows" telegram groups.
 
 
 Features
@@ -57,7 +57,7 @@ Modules
 - Calc
 - Meme Generator
 - Hackernews
-- Google (works, but is very very slow)
+- Google (works, but it is very very slow)
 - QR-Code Generator
 - Wetter
 - XKCD
