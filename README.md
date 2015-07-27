@@ -13,12 +13,13 @@ Features
 - Run in background
 - Call modules in intervals
 - Run as systemd service
+- Run multiple bots in different threads with different config-files
 
 
 Install
 -------
 
-- Clone this git to your home folder
+- Clone this git to `/opt/`
 - Run the `install.sh`
 - Run bolt with sudo(write to save-file in /var/lib/bolt/) or as a systemd service
 
@@ -36,9 +37,6 @@ usage: bolt.py [-h] [--token TOKEN] [--interval INTERVAL]
 
 optional arguments:
   -h, --help           show this help message and exit
-  --token TOKEN        token of your bot
-  --interval INTERVAL  interval between two updates
-  --group-id GROUP_ID  ID of your telegram-group
   -b, --background     starts bot in background
 ```
 

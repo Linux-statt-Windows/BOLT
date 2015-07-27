@@ -5,143 +5,147 @@
 # © 2015 LsW Community
 # Licensed under the GNU General Public License
 
-import os
-import urllib.request
-import json
 import argparse
-import time
+import glob
+import http.client
+import json
+import os
 import re
 import sys
-import http.client
+import time
+import urllib.request
+from threading import Thread
 
-from modules.wrapper import *
 import multipart
+from modules.wrapper import *
 
-BASE_URL=''
-GROUP_ID=''
-TOKEN=''
-MODULES=['']
+class BOLT(Thread):
 
-SAVE_FILE='/var/lib/bolt/update_id.data'
-CONFIG_FILE='/etc/bolt'
-
-
-def get_updates(url, modules, repeat_events):
-    r = []
-    for event in repeat_events:
-        event = (convert_sec(event[0]), event[1])
-        r.append(list(event + (0,)))
-    while True:
-        for event in r:
-            t = time.time()
-            if event[2] + event[0] <= t:
-                response = event[1](0)
-                if response.startswith('/'):
-                    if os.path.exists(response):
-                        send_image(response)
+    def __init__(self, url, modules, repeat_events, interval, group_id):
+        super().__init__()
+        self.url = url
+        self.modules = modules
+        self.repeat_events = repeat_events
+        self.interval = interval
+        self.group_id = group_id
+        self.save_file = '/var/lib/bolt/' + str(group_id)
+    
+    def run(self):
+        r = []
+        for event in self.repeat_events:
+            event = (self.convert_sec(event[0]), event[1])
+            r.append(list(event + (0,)))
+        while True:
+            for event in r:
+                t = time.time()
+                if event[2] + event[0] <= t:
+                    response = event[1](0)
+                    if response.startswith('/'):
+                        if os.path.exists(response):
+                            self.send_image(response)
+                        else:
+                            self.send_message('Fehler beim Senden der Antwort')
                     else:
-                        send_message('Fehler beim Senden der Antwort')
-                else:
-                    send_message(response)
-                event[2] = int(t)
-        data = 'limit=30&offset=' + get_latest_update_id()
-        rqst = urllib.request.urlopen(url, data.encode('utf-8'))
-        data = json.loads(rqst.read().decode('utf-8'))
-#        print(data)
-        for msg in data['result']:
-            if str(msg['message']['chat']['id']) == GROUP_ID:
-                if 'text' in msg['message']:
-                    if check_update_id(msg['update_id']):
-                        cmd = msg['message']['text']
-                        if cmd.startswith('/'):
-                            response = str(modules.get_response(cmd))
-                            if response.startswith('/'):
-                                if os.path.exists(response):
-                                    send_image(response)
+                        self.send_message(response)
+                    event[2] = int(t)
+            data = 'limit=30&offset=' + str(self.get_latest_update_id())
+            rqst = urllib.request.urlopen(self.url + 'getUpdates', data.encode('utf-8'))
+            data = json.loads(rqst.read().decode('utf-8'))
+#            print(data)
+            for msg in data['result']:
+                if str(msg['message']['chat']['id']) == self.group_id:
+                    if 'text' in msg['message']:
+                        if self.check_update_id(msg['update_id']):
+                            cmd = msg['message']['text']
+                            if cmd.startswith('/'):
+                                response = str(self.modules.get_response(cmd))
+                                if response.startswith('/'):
+                                    if os.path.exists(response):
+                                        self.send_image(response)
+                                    else:
+                                        self.send_message('Fehler beim Senden der Antwort')
                                 else:
-                                    send_message('Fehler beim Senden der Antwort')
-                            else:
-                                send_message(response)
-        time.sleep(INTERVAL)
+                                    self.send_message(response)
+            time.sleep(self.interval)
 
 
-def convert_sec(inp):
-    if inp == 'weekly':
-        return 604800
-    elif inp == 'biweekly':
-        return 604800*2
-    elif inp == 'daily':
-        return 86400
-    elif inp == 'monthly':
-        return 2592000
-    elif inp == 'hourly':
-        return 3600
-    else:
-        return inp
+    def convert_sec(self, inp):
+        if inp == 'weekly':
+            return 604800
+        elif inp == 'biweekly':
+            return 604800*2
+        elif inp == 'daily':
+            return 86400
+        elif inp == 'monthly':
+            return 2592000
+        elif inp == 'hourly':
+            return 3600
+        else:
+            return inp
 
 
-def rm_command(inp):
-    exp = re.sub('\/[a-zA-Z]*\s', '', inp)
-    return exp
+    def rm_command(self, inp):
+        exp = re.sub('\/[a-zA-Z]*\s', '', inp)
+        return exp
 
 
-def send_message(msg):
-    if msg:
-        msg = re.sub('&', '%26', str(msg))
-        msg = 'chat_id=' + GROUP_ID + '&text=' + str(msg)
-        rqst = urllib.request.urlopen(BASE_URL + 'sendMessage', msg.encode('utf-8'))
+    def send_message(self, msg):
+        if msg:
+            msg = re.sub('&', '%26', str(msg))
+            msg = 'chat_id=' + self.group_id + '&text=' + str(msg)
+            rqst = urllib.request.urlopen(self.url + 'sendMessage', msg.encode('utf-8'))
 
-        #NOTE: Maybe send check?
-        #data = json.loads(rqst.read().decode('utf-8'))
-
-
-def send_image(filename):
-    files = [('photo', 'image.jpg', filename)]
-    params =  [('chat_id',GROUP_ID)]
-    parts = urllib.parse.urlparse(BASE_URL + 'sendPhoto')
-    scheme = parts[0]
-    host = parts[1]
-    selector = parts[2]                 
-    content_type, body = multipart.encode_multipart(files, params)
-    if scheme == 'http':
-        host = http.client.HTTPConnection(host)
-    elif scheme == 'https':
-        host = http.client.HTTPSConnection(host)
-    host.request('POST', BASE_URL + 'sendPhoto', body=body, headers={'content-type':content_type, 'content-length':str(len(body))})
-    host.getresponse()
+            #NOTE: Maybe send check?
+            #data = json.loads(rqst.read().decode('utf-8'))
 
 
-def check_update_id(new_id):
-    new_id = str(new_id)
-    if os.path.isfile(SAVE_FILE):
-        f = open(SAVE_FILE, 'r')
-        line = f.readline()
-        f.close()
-        old_id = line
-    else:
-        old_id = '0'
-    if new_id > old_id:
-        f = open(SAVE_FILE, 'w+')
-        f.write(new_id)
-        f.close()
-        return True
-    else:
-        return False
+    def send_image(self, filename):
+        files = [('photo', 'image.jpg', filename)]
+        params =  [('chat_id', self.group_id)]
+        parts = urllib.parse.urlparse(self.url + 'sendPhoto')
+        scheme = parts[0]
+        host = parts[1]
+        selector = parts[2]                 
+        content_type, body = multipart.encode_multipart(files, params)
+        if scheme == 'http':
+            host = http.client.HTTPConnection(host)
+        elif scheme == 'https':
+            host = http.client.HTTPSConnection(host)
+        host.request('POST', self.url + 'sendPhoto', body=body, headers={'content-type':content_type, 'content-length':str(len(body))})
+        host.getresponse()
 
 
-def get_latest_update_id():
-    if os.path.isfile(SAVE_FILE):
-        f = open(SAVE_FILE, 'r')
-        line = f.readline()
-        f.close()
-        return line
-    return 0
+    def check_update_id(self, new_id):
+        new_id = str(new_id)
+        if os.path.isfile(self.save_file):
+            f = open(self.save_file, 'r')
+            line = f.readline()
+            f.close()
+            old_id = line
+        else:
+            old_id = '0'
+        if new_id > old_id:
+            f = open(self.save_file, 'w+')
+            f.write(new_id)
+            f.close()
+            return True
+        else:
+            return False
 
 
-def parse_config():
+    def get_latest_update_id(self):
+        if os.path.isfile(self.save_file):
+            f = open(self.save_file, 'r')
+            line = f.readline()
+            f.close()
+            return line
+        return 0
+
+
+def parse_config(config_file):
     group_id, token, interval, modules = '', '', '', ''
-    if os.path.isfile(CONFIG_FILE):
-        f = open(CONFIG_FILE, 'r')
+    if os.path.isfile(config_file):
+        f = open(config_file, 'r')
         line = f.readlines()
         for i in range(len(line)):
             if not line[i].startswith('#') and not line[i].startswith('\n'):
@@ -161,55 +165,45 @@ def parse_config():
         return group_id, token, interval, modules
 
 
-def main():
-    # parse config
-    global GROUP_ID
-    global TOKEN
-    global INTERVAL
-    global MODULES
-    group_id, token, interval, modules = parse_config()
-    if group_id is not '' and token is not '' and interval is not '' and modules is not '':
-        modules = json.loads(modules)
-        MODULES = modules
-        GROUP_ID = group_id
-        TOKEN = token
-        INTERVAL = float(interval)
-    else:
-        print('ERROR: Please set your config correctly!')
-        return
+def get_configs():
+    return None
 
+
+def main():
     # arg parsing
     parser = argparse.ArgumentParser()
-    parser.add_argument('--token', type=str, help='token of your bot')
-    parser.add_argument('--interval', type=int, help='interval between two updates')
-    parser.add_argument('--group-id', type=str, help='ID of your telegram-group')
     parser.add_argument('-b', '--background', action='store_true', help='starts bot in background')
 
     args = parser.parse_args()
+    
+    print('Starting BOLT...')
 
     if args.background:
         fpid = os.fork()
         if fpid != 0:
             sys.exit(0)
-    if args.token:
-        TOKEN = args.token
-    if args.group_id:
-        GROUP_ID = args.group_id
-    if args.interval:
-        INTERVAL = args.interval
 
     # check if data path exists
     if not os.path.isdir('/var/lib/bolt'):
         os.mkdir('/var/lib/bolt')
-
-    print('Starting BOLT...')
-    global BASE_URL
-    BASE_URL = 'https://api.telegram.org/bot' + TOKEN + '/' # base url for bots (DON'T CHANGE!)
+   
+    # get config files
+    config_files = glob.glob('/etc/channel.d/*')
     
-    modules = module_wrapper(MODULES)
-    repeat_events = modules.get_repeat_events()
-
-    get_updates(BASE_URL + 'getUpdates', modules, repeat_events)
+    for f in config_files:
+        # parse config
+        group_id, token, interval, modules = parse_config(f)
+        if group_id is not '' and token is not '' and interval is not '' and modules is not '':
+            modules = json.loads(modules)
+        else:
+            print('ERROR: Please set your config correctly!')
+            return
+         
+        modules = module_wrapper(modules)
+        repeat_events = modules.get_repeat_events()
+        
+        bot = BOLT('https://api.telegram.org/bot' + token + '/', modules, repeat_events, float(interval), group_id)
+        bot.start()
 
 
 if __name__ == '__main__':
