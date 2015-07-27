@@ -35,7 +35,6 @@ class module_wrapper(object):
         try:
             if cmd.startswith('/'):
                 if cmd.startswith('/hilfe'):
-                    print(cmd)
                     if len(cmd) > 7:
                         return self.get_help(cmd[7:])
                     else:

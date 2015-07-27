@@ -40,13 +40,14 @@ class BOLT(Thread):
                 t = time.time()
                 if event[2] + event[0] <= t:
                     response = event[1](0)
-                    if response.startswith('/'):
-                        if os.path.exists(response):
-                            self.send_image(response)
+                    if response != None:
+                        if response.startswith('/'):
+                            if os.path.exists(response):
+                                self.send_image(response)
+                            else:
+                                self.send_message('Fehler beim Senden der Antwort')
                         else:
-                            self.send_message('Fehler beim Senden der Antwort')
-                    else:
-                        self.send_message(response)
+                            self.send_message(response)
                     event[2] = int(t)
             data = 'limit=30&offset=' + str(self.get_latest_update_id())
             rqst = urllib.request.urlopen(self.url + 'getUpdates', data.encode('utf-8'))
