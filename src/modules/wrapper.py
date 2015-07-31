@@ -31,7 +31,7 @@ class module_wrapper(object):
 
 
     def get_response(self, cmd):
-        cmd = re.sub('@.*', '', cmd)
+        cmd = re.sub('@.*', '', cmd).lower()
         try:
             if cmd.startswith('/'):
                 if cmd.startswith('/hilfe'):

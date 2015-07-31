@@ -6,7 +6,7 @@ import json
 URL = 'http://api.linux-statt-windows.org/infos.json'
 
 def callback():
-    return '/lsw Github', get_github
+    return '/lsw github', get_github
 
 
 def get_github(inp):

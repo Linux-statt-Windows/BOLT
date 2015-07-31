@@ -6,7 +6,7 @@ import json
 URL = ''
 
 def callback():
-    return '/lsw Version', get_version
+    return '/lsw version', get_version
 
 
 def get_version(inp):

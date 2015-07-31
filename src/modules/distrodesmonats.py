@@ -6,7 +6,7 @@ import json
 URL = 'http://api.linux-statt-windows.org/infos.json'
 
 def callback():
-    return '/lsw Distro', get_distro
+    return '/lsw distro', get_distro
 
 
 def get_distro(inp):

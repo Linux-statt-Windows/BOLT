@@ -6,7 +6,7 @@ import json
 URL = 'http://api.linux-statt-windows.org/infos.json'
 
 def callback():
-    return '/lsw FAQ', get_faq
+    return '/lsw faq', get_faq
 
 
 def get_faq(inp):

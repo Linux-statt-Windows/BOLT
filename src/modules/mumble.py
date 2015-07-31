@@ -6,7 +6,7 @@ import json
 URL = 'http://api.linux-statt-windows.org/infos.json'
 
 def callback():
-    return '/lsw Mumble', get_mumble
+    return '/lsw mumble', get_mumble
 
 
 def get_mumble(inp):

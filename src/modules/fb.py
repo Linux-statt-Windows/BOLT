@@ -6,7 +6,7 @@ import json
 URL = 'http://api.linux-statt-windows.org/infos.json'
 
 def callback():
-    return '/lsw Facebook', get_fb
+    return '/lsw facebook', get_fb
 
 
 def get_fb(inp):

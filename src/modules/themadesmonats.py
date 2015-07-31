@@ -8,7 +8,7 @@ import re
 URL = 'http://api.linux-statt-windows.org/infos.json'
 
 def callback():
-    return '/lsw Thema', monthly_topic
+    return '/lsw thema', monthly_topic
 
 
 def monthly_topic(inp):
