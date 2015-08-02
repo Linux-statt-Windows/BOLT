@@ -14,6 +14,7 @@ Features
 - Call modules in intervals
 - Run as systemd service
 - Run multiple bots in different threads with different config-files
+- Sends a notification to a specific group-/chat-id, if banned username rejoins the group
 
 
 Install

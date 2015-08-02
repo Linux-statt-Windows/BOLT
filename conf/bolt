@@ -7,6 +7,10 @@ TOKEN=
 # time before looking for new users (in seconds)
 INTERVAL=1
 
+# banned nick names
+BANNED_NICKS=['']
+NOTIFY_ID=
+
 # modules
 {
     "themadesmonats":"True",
