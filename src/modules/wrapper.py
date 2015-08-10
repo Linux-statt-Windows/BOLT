@@ -31,19 +31,19 @@ class module_wrapper(object):
 
 
     def get_response(self, cmd):
-        cmd = re.sub('@.*', '', cmd).lower()
+        cmd = re.sub('@.*', '', cmd)
         try:
             if cmd.startswith('/'):
-                if cmd.startswith('/hilfe'):
+                if cmd.lower().startswith('/hilfe'):
                     if len(cmd) > 7:
                         return self.get_help(cmd[7:])
                     else:
                         return self.get_help(None)
-                elif cmd in self.plugins:
+                elif cmd.lower() in self.plugins:
                     return self.plugins[cmd](self.rm_command(cmd))
                 else:
                     cmd = re.split(' ',cmd)
-                    if cmd[0] in self.plugins:
+                    if cmd[0].lower() in self.plugins:
                         new_cmd = []
                         for c in range(1,len(cmd)):
                             new_cmd.append(cmd[c])

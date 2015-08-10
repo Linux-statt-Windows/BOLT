@@ -242,7 +242,7 @@ def main():
         
         bot = BOLT('https://api.telegram.org/bot' + token + '/', modules, repeat_events, float(interval), group_id, banned_nicks, notify_id)
         bot.start()
-
+        
 
 if __name__ == '__main__':
     main()
