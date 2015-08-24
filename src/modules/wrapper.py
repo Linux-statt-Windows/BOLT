@@ -40,14 +40,12 @@ class module_wrapper(object):
                     else:
                         return self.get_help(None)
                 elif cmd.lower() in self.plugins:
-                    return self.plugins[cmd](self.rm_command(cmd))
+                    return self.plugins[cmd.lower()](self.rm_command(cmd))
                 else:
                     cmd = re.split(' ',cmd)
                     if cmd[0].lower() in self.plugins:
-                        new_cmd = []
-                        for c in range(1,len(cmd)):
-                            new_cmd.append(cmd[c])
-                        return self.plugins[cmd[0]](new_cmd)
+                        new_cmd = [cmd[i] for i in range(1, len(cmd))]
+                        return self.plugins[cmd[0].lower()](new_cmd)
                     else:
                         rqst = urllib.request.urlopen('http://apimeme.com/meme?meme=Grandma+Finds+The+Internet&top=Wat+willst&bottom=du+von+mir%3F')
                         data = rqst.read()

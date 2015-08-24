@@ -53,10 +53,11 @@ class BOLT(Thread):
                         else:
                             self.send_message(response)
                     event[2] = int(t)
-            data = 'limit=30&offset=' + str(self.get_latest_update_id())
+            data = 'limit=300&offset=' + str(self.get_latest_update_id())
             rqst = urllib.request.urlopen(self.url + 'getUpdates', data.encode('utf-8'))
             data = json.loads(rqst.read().decode('utf-8'))
-            
+#            print(data)
+
             # React to commands
             for msg in data['result']:
                 if str(msg['message']['chat']['id']) == self.group_id:
