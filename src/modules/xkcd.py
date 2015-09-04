@@ -11,12 +11,19 @@ def callback():
 
 
 def get_xkcd(inp):
-    rqst = urllib.request.urlopen(URL)
-    rqst = urllib.request.urlopen(rqst.geturl() + 'info.0.json')
-    img_rqst = urllib.request.urlopen(json.loads(rqst.read().decode('utf-8'))['img'])
-    img = open(f, 'wb')
-    img.write(img_rqst.read())
-    img.close()
+    if len(inp) > 0:
+        rqst = urllib.request.urlopen('http://xkcd.com/' + str(inp[0]) + '/info.0.json' )
+        img_rqst = urllib.request.urlopen(json.loads(rqst.read().decode('utf-8'))['img'])
+        img = open(f, 'wb')
+        img.write(img_rqst.read())
+        img.close()
+    else:
+        rqst = urllib.request.urlopen(URL)
+        rqst = urllib.request.urlopen(rqst.geturl() + 'info.0.json')
+        img_rqst = urllib.request.urlopen(json.loads(rqst.read().decode('utf-8'))['img'])
+        img = open(f, 'wb')
+        img.write(img_rqst.read())
+        img.close()
     return f
 
 
