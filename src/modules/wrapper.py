@@ -47,7 +47,8 @@ class module_wrapper(object):
                         new_cmd = [cmd[i] for i in range(1, len(cmd))]
                         return self.plugins[cmd[0].lower()](new_cmd)
                     else:
-                        rqst = urllib.request.urlopen('http://apimeme.com/meme?meme=Grandma+Finds+The+Internet&top=Wat+willst&bottom=du+von+mir%3F')
+                        #rqst = urllib.request.urlopen('http://apimeme.com/meme?meme=Grandma+Finds+The+Internet&top=Wat+willst&bottom=du+von+mir%3F')
+                        rqst = urllib.request.urlopen('http://m.memegen.com/w5td5q.jpg')
                         data = rqst.read()
                         img = open('/var/lib/bolt/error.png', 'wb')
                         img.write(data)
