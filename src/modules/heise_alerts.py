@@ -60,7 +60,7 @@ def get_alerts(inp):
     return ret
 
 def get_help():
-    return "Gibt die aktuellen Alerts von Heise-Security aus"
+    return "\n/heisealerts: Gibt die aktuellen Alerts von Heise-Security aus"
 
 def main():
     print ( get_alerts("") )
