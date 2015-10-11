@@ -31,7 +31,7 @@ class BOLT(Thread):
         self.banned_nicks = banned_nicks
         self.notify_id = notify_id
         self.save_file = '/var/lib/bolt/' + str(group_id)
-    
+
     def run(self):
         r = []
         for event in self.repeat_events:
@@ -55,9 +55,11 @@ class BOLT(Thread):
                     event[2] = int(t)
             data = 'limit=300&offset=' + str(self.get_latest_update_id())
             rqst = urllib.request.urlopen(self.url + 'getUpdates', data.encode('utf-8'))
-            data = json.loads(rqst.read().decode('utf-8'))
-#            print(data)
-
+            try:
+                data = json.loads(rqst.read().decode('utf-8'))
+                #print(data)
+            except Exception as e:
+                print ( "Some Exception occured while fetching data from telegram server:\n" + e )
             # React to commands
             for msg in data['result']:
                 if str(msg['message']['chat']['id']) == self.group_id:
@@ -73,14 +75,14 @@ class BOLT(Thread):
                                         self.send_message('Fehler beim Senden der Antwort')
                                 else:
                                     self.send_message(response)
-            
+
             # Check for banned nicks
             for msg in data['result']:
                 if 'new_chat_participant' in msg['message']:
                     if msg['message']['new_chat_participant']['username'] in self.banned_nicks:
                         if self.check_update_id(msg['update_id']):
                             self.send_notification('WARNNUNG! Der verbannte Username ' + msg['message']['new_chat_participant']['username'] + ' hat die Gruppe wieder betreten!')
-            
+
             time.sleep(self.interval)
 
 
@@ -130,14 +132,14 @@ class BOLT(Thread):
     def send_image(self, filename):
         files = [('photo', 'image.jpg', filename)]
         params =  [('chat_id', self.group_id)]
-        
+
         # Build multipart/form data
         parts = urllib.parse.urlparse(self.url + 'sendPhoto')
         scheme = parts[0]
         host = parts[1]
-        selector = parts[2]                 
+        selector = parts[2]
         content_type, body = multipart.encode_multipart(files, params)
-        
+
         # Send multipart/form data
         if scheme == 'http':
             host = http.client.HTTPConnection(host)
@@ -214,7 +216,7 @@ def main():
     parser.add_argument('-b', '--background', action='store_true', help='starts bot in background')
 
     args = parser.parse_args()
-    
+
     print('Starting BOLT...')
 
     if args.background:
@@ -225,10 +227,10 @@ def main():
     # check if data path exists
     if not os.path.isdir('/var/lib/bolt'):
         os.mkdir('/var/lib/bolt')
-   
+
     # get config files
     config_files = glob.glob('/etc/channel.d/*')
-    
+
     for f in config_files:
         # parse config
         group_id, token, interval, modules, banned_nicks, notify_id = parse_config(f)
@@ -237,13 +239,13 @@ def main():
         else:
             print('ERROR: Please set your config correctly!')
             return
-         
+
         modules = module_wrapper(modules)
         repeat_events = modules.get_repeat_events()
-        
+
         bot = BOLT('https://api.telegram.org/bot' + token + '/', modules, repeat_events, float(interval), group_id, banned_nicks, notify_id)
         bot.start()
-        
+
 
 if __name__ == '__main__':
     main()

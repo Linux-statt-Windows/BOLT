@@ -27,5 +27,6 @@ NOTIFY_ID=
     "weather":"True",
     "hackernews":"True",
     "qr":"True",
-    "meme":"True"
+    "meme":"True",
+    "heise_alerts":"True"
 }
