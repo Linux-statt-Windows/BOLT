@@ -53,8 +53,11 @@ class BOLT(Thread):
                         else:
                             self.send_message(response)
                     event[2] = int(t)
-            data = 'limit=300&offset=' + str(self.get_latest_update_id())
-            rqst = urllib.request.urlopen(self.url + 'getUpdates', data.encode('utf-8'))
+            try:
+                data = 'limit=300&offset=' + str(self.get_latest_update_id())
+                rqst = urllib.request.urlopen(self.url + 'getUpdates', data.encode('utf-8'))
+            except:
+                continue
             try:
                 data = json.loads(rqst.read().decode('utf-8'))
                 #print(data)
