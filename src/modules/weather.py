@@ -4,6 +4,7 @@ import urllib.request
 import json
 
 URL = 'http://api.openweathermap.org/data/2.5/weather?'
+API_KEY = ''
 
 def callback():
     return '/wetter', get_weather
@@ -15,7 +16,8 @@ def get_weather(inp):
         req += i
     req = {
             "q":req,
-            "units":"metric"
+            "units":"metric",
+            "appid":API_KEY
             }
     req = urllib.parse.urlencode(req)
     rqst = urllib.request.urlopen(URL + req)

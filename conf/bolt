@@ -28,5 +28,6 @@ NOTIFY_ID=
     "hackernews":"True",
     "qr":"True",
     "meme":"True",
-    "heise_alerts":"True"
+    "heise_alerts":"True",
+    "shodan":"True"
 }
